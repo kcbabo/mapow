@@ -16,6 +16,8 @@ package org.mapow.example.order.abc;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.mapow.example.order.xyz.LineItem;
+
 public class ABCOrder {
 
     private OrderHeader header;
@@ -41,5 +43,23 @@ public class ABCOrder {
     public ABCOrder addOrderItem(OrderItem orderItem) {
         orderItems.add(orderItem);
         return this;
+    }
+    
+    public String toString() {
+        String order =
+               "============== Order =============\n"
+               + "customerNum : " + header.getCustomerNum() + "\n"
+               + "status : " + header.getStatus() + "\n"
+               + "orderNum : " + header.getOrderNum() + "\n"
+               + "============= Line Items =============\n";
+        if (orderItems != null) {
+            for (OrderItem item : orderItems) {
+                order += "id : " + item.getId() + "\n"
+                        + "price : " + item.getPrice() + "\n"
+                        + "quantity : " + item.getQuantity() + "\n";
+            }
+        }
+        
+        return order;
     }
 }

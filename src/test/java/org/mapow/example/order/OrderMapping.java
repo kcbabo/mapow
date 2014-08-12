@@ -16,6 +16,11 @@ package org.mapow.example.order;
 import static org.mapow.ObjectInput.fromObject;
 import static org.mapow.StreamInput.fromFile;
 
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.io.StringWriter;
+
+import org.mapow.ObjectOutput;
 import org.mapow.PrintOutput;
 import org.mapow.Transformation;
 import org.mapow.TransformationBuilder;
@@ -49,74 +54,153 @@ public class OrderMapping {
     }
     
     public static void javaToJava() {
+        ABCOrder input = createABCOrder();
+        ObjectOutput output = ObjectOutput.toObject();
+        printBefore(input);
+        
+        // transformation logic
         TransformationBuilder tb = new TransformationBuilder()
             .source(fromObject(createABCOrder()))
             .map(DozerMapper.newMap("dozerOrderMapping.xml").target(XYZOrder.class))
-            .sink(new PrintOutput());
+            .sink(output);
         Transformation t = tb.build();
         t.transform();
+        
+        printAfter(output.getOutput());
     }
     
     public static void javaToJSON() {
+        ABCOrder input = createABCOrder();
+        ObjectOutput output = ObjectOutput.toObject();
+        printBefore(input);
+
+        // transformation logic
         TransformationBuilder tb = new TransformationBuilder()
             .source(fromObject(createABCOrder()))
             .map(DozerMapper.newMap("dozerOrderMapping.xml").target(XYZOrder.class))
             .encode(new JacksonEncoder())
-            .sink(new PrintOutput());
+            .sink(output);
         Transformation t = tb.build();
         t.transform();
+
+        printAfter(output.getOutput());
     }
     
     public static void javaToXML() {
+        ABCOrder input = createABCOrder();
+        ObjectOutput output = ObjectOutput.toObject();
+        printBefore(input);
+        
+        // transformation logic
         TransformationBuilder tb = new TransformationBuilder()
             .source(fromObject(createABCOrder()))
             .map(DozerMapper.newMap("dozerOrderMapping.xml").target(XYZOrder.class))
             .encode(new CastorEncoder(XYZOrder.class))
-            .sink(new PrintOutput());
+            .sink(output);
         Transformation t = tb.build();
         t.transform();
+
+        printAfter(output.getOutput());
     }
     
     public static void xmlToJava() throws Exception {
+        ObjectOutput output = ObjectOutput.toObject();
+        printBefore(readFile(ABC_ORDER_XML_PATH));
+        
+        // transformation logic
         TransformationBuilder tb = new TransformationBuilder()
             .source(fromFile(ABC_ORDER_XML_PATH))
             .decode(new CastorEncoder(ABCOrder.class))
             .map(DozerMapper.newMap("dozerOrderMapping.xml").target(XYZOrder.class))
-            .sink(new PrintOutput());
+            .sink(output);
         Transformation t = tb.build();
         t.transform();
+
+        printAfter(output.getOutput());
     }
     
     public static void xmlToXml() throws Exception {
+        ObjectOutput output = ObjectOutput.toObject();
+        printBefore(readFile(ABC_ORDER_XML_PATH));
+        
+        // transformation logic
         TransformationBuilder tb = new TransformationBuilder()
             .source(fromFile(ABC_ORDER_XML_PATH))
             .decode(new CastorEncoder(ABCOrder.class))
             .map(DozerMapper.newMap("dozerOrderMapping.xml").target(XYZOrder.class))
             .encode(new CastorEncoder(XYZOrder.class))
-            .sink(new PrintOutput());
+            .sink(output);
         Transformation t = tb.build();
         t.transform();
+        
+        printAfter(output.getOutput());
     }
     
     public static void jsonToJava() throws Exception {
+        ObjectOutput output = ObjectOutput.toObject();
+        printBefore(readFile(ABC_ORDER_JSON_PATH));
+        
+        // transformation logic
         TransformationBuilder tb = new TransformationBuilder()
             .source(fromFile(ABC_ORDER_JSON_PATH))
             .decode(new JacksonEncoder(ABCOrder.class))
             .map(DozerMapper.newMap("dozerOrderMapping.xml").target(XYZOrder.class))
-            .sink(new PrintOutput());
+            .sink(output);
         Transformation t = tb.build();
         t.transform();
+
+        printAfter(output.getOutput());
     }
     
     public static void jsonToJson() throws Exception {
+        ObjectOutput output = ObjectOutput.toObject();
+        printBefore(readFile(ABC_ORDER_JSON_PATH));
+        
+        // transformation logic
         TransformationBuilder tb = new TransformationBuilder()
             .source(fromFile(ABC_ORDER_JSON_PATH))
             .decode(new JacksonEncoder(ABCOrder.class))
             .map(DozerMapper.newMap("dozerOrderMapping.xml").target(XYZOrder.class))
             .encode(new JacksonEncoder())
-            .sink(new PrintOutput());
+            .sink(output);
         Transformation t = tb.build();
         t.transform();
+
+        printAfter(output.getOutput());
+    }
+    
+    public static void jsonToXml() throws Exception {
+        ObjectOutput output = ObjectOutput.toObject();
+        printBefore(readFile(ABC_ORDER_JSON_PATH));
+        
+        // transformation logic
+        TransformationBuilder tb = new TransformationBuilder()
+            .source(fromFile(ABC_ORDER_JSON_PATH))
+            .decode(new JacksonEncoder(ABCOrder.class))
+            .map(DozerMapper.newMap("dozerOrderMapping.xml").target(XYZOrder.class))
+            .encode(new CastorEncoder(XYZOrder.class))
+            .sink(output);
+        Transformation t = tb.build();
+        t.transform();
+
+        printAfter(output.getOutput());
+    }
+    
+    public static void xmlToJson() throws Exception {
+        ObjectOutput output = ObjectOutput.toObject();
+        printBefore(readFile(ABC_ORDER_XML_PATH));
+        
+        // transformation logic
+        TransformationBuilder tb = new TransformationBuilder()
+            .source(fromFile(ABC_ORDER_XML_PATH))
+            .decode(new CastorEncoder(ABCOrder.class))
+            .map(DozerMapper.newMap("dozerOrderMapping.xml").target(XYZOrder.class))
+            .encode(new JacksonEncoder())
+            .sink(output);
+        Transformation t = tb.build();
+        t.transform();
+
+        printAfter(output.getOutput());
     }
     
     private static ABCOrder createABCOrder() {
@@ -143,9 +227,48 @@ public class OrderMapping {
               + "\n##\tjsonToJava"
               + "\n##\txmlToXml"
               + "\n##\tjsonToJson"
+              + "\n##\txmlToJson"
+              + "\n##\tjsonToXml"
               + "\n##"
               + "\n## An example from Maven:"
               + "\n##\t mvn -Prun -Dexec.args=javaToXML"
               + "\n#############");
+    }
+    
+    private static void printBefore(Object content) {
+        System.out.println(
+                "\n----------- Content Before Transformation -----------"
+              + "\n" + content + "\n"
+              + "----------- Content Before Transformation -----------\n");
+        
+    }
+    
+    private static void printAfter(Object content) {
+        System.out.println(
+                "\n----------- Content After Transformation -----------"
+              + "\n" + content + "\n"
+              + "----------- Content After Transformation -----------\n");
+        
+    }
+    
+    private static String readFile(String path) {
+        InputStreamReader reader = null;
+        try {
+            reader = new InputStreamReader(new FileInputStream(path));
+            StringWriter sw = new StringWriter();
+            char[] buf = new char[4096];
+            int count;
+            while ( (count = reader.read(buf, 0, buf.length)) != -1) {
+                sw.write(buf, 0, count);
+            }
+            sw.flush();
+            return sw.toString();
+        } catch (java.io.IOException ioEx) {
+            throw new RuntimeException(ioEx);
+        } finally {
+            if (reader != null) {
+                try { reader.close(); } catch (Exception ex) {}
+            }
+        }
     }
 }
