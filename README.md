@@ -4,16 +4,16 @@ Transformation framework with a touch of funk.
 
 Usage
 =====
-The org.mapow.example.order.OrderMapper class contains a set of methods which demonstrate the following mapping scenarios:
-* Java to Java
-* Java to XML
-* Java to JSON
-* JSON to Java
-* JSON to JSON
-* JSON to XML
-* XML to Java
-* XML to JSON
-* XML to XML
+The [org.mapow.example.order.OrderMapper](https://github.com/kcbabo/mapow/blob/master/src/test/java/org/mapow/example/order/OrderMapping.java#L40) class contains a set of methods which demonstrate the following mapping scenarios:
+* [Java to Java](https://github.com/kcbabo/mapow/blob/master/src/test/java/org/mapow/example/order/OrderMapping.java#L56)
+* [Java to XML](https://github.com/kcbabo/mapow/blob/master/src/test/java/org/mapow/example/order/OrderMapping.java#L89)
+* [Java to JSON](https://github.com/kcbabo/mapow/blob/master/src/test/java/org/mapow/example/order/OrderMapping.java#L72)
+* [JSON to Java](https://github.com/kcbabo/mapow/blob/master/src/test/java/org/mapow/example/order/OrderMapping.java#L72)
+* [JSON to JSON](https://github.com/kcbabo/mapow/blob/master/src/test/java/org/mapow/example/order/OrderMapping.java#L155)
+* [JSON to XML](https://github.com/kcbabo/mapow/blob/master/src/test/java/org/mapow/example/order/OrderMapping.java#L155)
+* [XML to Java](https://github.com/kcbabo/mapow/blob/master/src/test/java/org/mapow/example/order/OrderMapping.java#L155)
+* [XML to JSON](https://github.com/kcbabo/mapow/blob/master/src/test/java/org/mapow/example/order/OrderMapping.java#L155)
+* [XML to XML](https://github.com/kcbabo/mapow/blob/master/src/test/java/org/mapow/example/order/OrderMapping.java#L155)
 
 Running Examples
 ================
