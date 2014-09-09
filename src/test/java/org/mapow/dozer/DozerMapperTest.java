@@ -19,6 +19,8 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 import org.mapow.ObjectOutput;
+import org.mapow.OrderA;
+import org.mapow.OrderB;
 import org.mapow.Transformation;
 import org.mapow.TransformationBuilder;
 import org.mapow.mapper.dozer.DozerMapper;

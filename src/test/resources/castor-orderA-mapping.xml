@@ -1,0 +1,13 @@
+<mapping>
+    
+    <class name="org.mapow.OrderA">
+        <field name="orderNum">
+            <bind-xml name="orderNum"/>
+        </field>
+        <field name="amount"/>
+        <field name="items" type="org.mapow.Item" collection="arraylist">
+            <bind-xml name="item" location="items"/>
+        </field>
+    </class>
+
+</mapping>

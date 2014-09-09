@@ -3,8 +3,8 @@
           xsi:schemaLocation="http://dozer.sourceforge.net http://dozer.sourceforge.net/schema/beanmapping.xsd">
 
     <mapping>
-	    <class-a>org.mapow.dozer.OrderA</class-a>
-        <class-b>org.mapow.dozer.OrderB</class-b>
+	    <class-a>org.mapow.OrderA</class-a>
+        <class-b>org.mapow.OrderB</class-b>
 	
 	    <field>
 	      <a>orderNum</a>

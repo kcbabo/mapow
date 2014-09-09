@@ -18,23 +18,33 @@ import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.io.StringWriter;
 
+import org.castor.xml.XMLProperties;
+import org.exolab.castor.mapping.Mapping;
 import org.exolab.castor.xml.Marshaller;
 import org.exolab.castor.xml.Unmarshaller;
+import org.exolab.castor.xml.XMLContext;
 import org.mapow.Encoder;
 
 public class CastorEncoder implements Encoder {
     
+    private static final String ATTR_NODE_TYPE = "attribute";
+    private static final String ELE_NODE_TYPE = "element";
+    
     private Class<?> _decodedClass;
+    private XMLContext _context;
     
     public CastorEncoder(Class<?> decodedClass) {
         _decodedClass = decodedClass;
+        _context = new XMLContext();
     }
 
     @Override
     public Object encode(Object obj) {
         StringWriter sw = new StringWriter();
         try {
-            Marshaller.marshal(obj, sw);
+            Marshaller marsh = _context.createMarshaller();
+            marsh.setWriter(sw);
+            marsh.marshal(obj);
         } catch (Exception ex) {
             throw new RuntimeException("Castor encoding failed: " + ex.toString());
         }
@@ -44,19 +54,35 @@ public class CastorEncoder implements Encoder {
     @Override
     public Object decode(Object obj) {
         Object decodedObj = null;
-        
+        Unmarshaller umarsh = _context.createUnmarshaller();
+        umarsh.setClass(_decodedClass);
         try {
             if (obj instanceof InputStream) {
-                decodedObj = Unmarshaller.unmarshal(
-                        _decodedClass, new InputStreamReader((InputStream)obj));
+                decodedObj = umarsh.unmarshal(new InputStreamReader((InputStream)obj));
             } else if (obj instanceof String) {
-                decodedObj = Unmarshaller.unmarshal(
-                        _decodedClass, new StringReader((String)obj));
+                decodedObj = umarsh.unmarshal(new StringReader((String)obj));
             }
             return _decodedClass.cast(decodedObj);
         } catch (Exception ex) {
             throw new RuntimeException("Castor decoding failed: " + ex.toString());
         }
+    }
+    
+    public CastorEncoder primitivesAsAttributes() {
+        _context.setProperty(XMLProperties.PRIMITIVE_NODE_TYPE, ATTR_NODE_TYPE);
+        return this;
+    }
+    
+    public CastorEncoder primitivesAsElements() {
+        _context.setProperty(XMLProperties.PRIMITIVE_NODE_TYPE, ELE_NODE_TYPE);
+        return this;
+    }
+    
+    public CastorEncoder addMapping(String path) throws Exception {
+        Mapping mapping = new Mapping();
+        mapping.loadMapping(path);
+        _context.addMapping(mapping);
+        return this;
     }
     
 }

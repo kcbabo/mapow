@@ -1,4 +1,4 @@
-package org.mapow.dozer;
+package org.mapow;
 
 public class OrderB {
     private String orderNo;

@@ -39,6 +39,9 @@ import org.mapow.mapper.dozer.DozerMapper;
  */
 public class OrderMapping {
     
+    private static final String ABC_CASTOR_MAP_PATH = 
+            "target/test-classes/org/mapow/example/order/castor-abc-order.xml";
+    
     private static final String ABC_ORDER_XML_PATH = 
             "target/test-classes/org/mapow/example/order/abc-order.xml";
 
@@ -110,7 +113,7 @@ public class OrderMapping {
         // transformation logic
         TransformationBuilder tb = new TransformationBuilder()
             .source(fromFile(ABC_ORDER_XML_PATH))
-            .decode(new CastorEncoder(ABCOrder.class))
+            .decode(new CastorEncoder(ABCOrder.class).addMapping(ABC_CASTOR_MAP_PATH))
             .map(DozerMapper.newMap("dozerOrderMapping.xml").target(XYZOrder.class))
             .sink(output);
         Transformation t = tb.build();

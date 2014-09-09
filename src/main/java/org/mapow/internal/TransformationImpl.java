@@ -13,8 +13,6 @@
  */
 package org.mapow.internal;
 
-import java.util.List;
-
 import org.mapow.Encoder;
 import org.mapow.Mapper;
 import org.mapow.TransformInput;
